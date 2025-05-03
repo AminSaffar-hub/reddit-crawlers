@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "test-technique-heuritech"
+version = "0.1.0"
+description = ""
+authors = ["amin saffar <amin@stackadoc.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+selenium = "^4.31.0"
+bs4 = "^0.0.2"
+webdriver-manager = "^4.0.2"
+pydantic = "^2.11.4"
+black = "^25.1.0"
+isort = "^6.0.1"
+flake8 = "^7.2.0"
+pyarrow = "^20.0.0"
+minio = "^7.2.15"
+celery = {extras = ["redis"], version = "^5.5.2"}
+pytest = "^8.3.5"
+ruff = "^0.11.8"
+mypy = "^1.15.0"
+pytest-mock = "^3.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

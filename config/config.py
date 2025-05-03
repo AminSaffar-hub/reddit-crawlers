@@ -55,6 +55,13 @@ class BaseConfig:
     MINIO_ACCESS_KEY = os.environ.get("MINIO_ACCESS_KEY", "minioadmin")
     MINIO_SECRET_KEY = os.environ.get("MINIO_SECRET_KEY", "minioadmin")
 
+    SNOWFLAKE_USER = os.environ.get("SNOWFLAKE_USER", "user")
+    SNOWFLAKE_PASSWORD = os.environ.get("SNOWFLAKE_PASSWORD", "password")
+    SNOWFLAKE_ACCOUNT = os.environ.get("SNOWFLAKE_ACCOUNT", "account")
+    SNOWFLAKE_SCHEMA = os.environ.get("SNOWFLAKE_SCHEMA", "schema")
+    SNOWFLAKE_STAGE = os.environ.get("SNOWFLAKE_STAGE", "stage")
+    SNOWFLAKE_DATABASE = os.environ.get("SNOWFLAKE_DATABASE", "database")
+
 
 class DevelopmentConfig(BaseConfig):
     CELERYD_LOG_LEVEL = "INFO"

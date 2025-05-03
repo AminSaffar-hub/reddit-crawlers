@@ -119,5 +119,24 @@ services:
     depends_on:
       - redis
 
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: streamlit run streamlit_app.py --server.address=0.0.0.0 --server.port=8501
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - crawler_worker
+      - processor_worker
+      - storage_worker
+      - media_worker
+
 volumes:
   minio_data:

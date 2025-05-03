@@ -22,6 +22,7 @@ ruff = "^0.11.8"
 mypy = "^1.15.0"
 pytest-mock = "^3.14.0"
 streamlit = "^1.45.0"
+flower = "^2.0.1"
 
 
 [build-system]

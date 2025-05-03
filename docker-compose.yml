@@ -41,7 +41,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A celery_app worker -Q crawling -n crawler@%h
+    command: celery -A celery_app worker -Q crawling -n crawler@%h --loglevel=INFO
     volumes:
       - ./:/app
     environment:
@@ -57,7 +57,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A celery_app worker -Q processing -n processor@%h
+    command: celery -A celery_app worker -Q processing -n processor@%h --loglevel=INFO
     volumes:
       - ./:/app
     environment:
@@ -74,7 +74,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A celery_app worker -Q storage -n storage@%h
+    command: celery -A celery_app worker -Q storage -n storage@%h --loglevel=INFO
     volumes:
       - ./:/app
     environment:
@@ -92,7 +92,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A celery_app worker -Q media -n media@%h
+    command: celery -A celery_app worker -Q media -n media@%h --loglevel=INFO
     volumes:
       - ./:/app
     environment:

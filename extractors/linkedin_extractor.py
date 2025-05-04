@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 
 from config.config import settings
 from extractors.base_extractor import BaseExtractor
-from models.data_models import Author, Media, Post, Source
+from models.data_models import Author, Media, Post, Source, ExtractionResult
 from scrapers.selenium_scraper import WebScraper
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ class LinkedinExtractor(BaseExtractor):
         self.scraper = WebScraper()
         self.base_url = "https://www.linkedin.com"
 
-    def extract(self, source_config: Source):
+    def extract(self, source_config: Source) -> ExtractionResult:
         author_posts_url = (
             f"{self.base_url}/in/{source_config.author}/recent-activity/all/"
         )
@@ -52,12 +52,13 @@ class LinkedinExtractor(BaseExtractor):
                             posts.append(post)
                             all_medias.extend(medias)
 
-                return author, posts, all_medias
-
             except TimeoutException:
                 logger.error(f"Timeout while loading {author_posts_url}")
+                raise
             except Exception as e:
                 logger.error(f"Error extracting data from {author_posts_url}: {e}")
+                raise
+            return ExtractionResult(author=author, posts=posts, medias=all_medias)
 
     def _login(self, driver):
         driver.get("https://www.linkedin.com/login")
@@ -75,7 +76,7 @@ class LinkedinExtractor(BaseExtractor):
 
     def _parse_post(self, post_element, author_id):
         post_id = generate(size=8)
-        
+
         post_url = None
         post_div = post_element.find("div", attrs={"data-urn": True})
         if post_div:
@@ -200,7 +201,7 @@ class LinkedinExtractor(BaseExtractor):
 
 if __name__ == "__main__":
     extractor = LinkedinExtractor()
-    author, posts, medias = extractor.extract(
+    result = extractor.extract(
         Source(
             author="etnikhalili",
             date_start=datetime.now() - timedelta(days=45),
@@ -208,6 +209,6 @@ if __name__ == "__main__":
         )
     )
 
-    print(author)
-    print(posts)
-    print(medias)
+    print(result.author)
+    print(result.posts)
+    print(result.medias)

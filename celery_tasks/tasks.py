@@ -5,7 +5,7 @@ from typing import List, Optional
 from celery import shared_task
 
 from celery_tasks.base_task import ExtractTask, StorageTask
-from models.data_models import Author, Media, Post, Source
+from models.data_models import Author, Media, Post, Source, ExtractionResult
 
 logger = logging.getLogger(__name__)
 
@@ -24,19 +24,19 @@ def crawl_author(
         )
 
         extractor = self.get_extractor(source_type)
-        author, posts, medias = extractor.extract(source_config)
+        result: ExtractionResult = extractor.extract(source_config)
 
-        if author and posts:
+        if result.author and result.posts:
             logger.info(f"Successfully extracted data for author: {author_name}")
-            author_dict = author.dict()
-            posts_dict = [post.dict() for post in posts]
+            author_dict = result.author.model_dump()
+            posts_dict = [post.model_dump() for post in result.posts]
             medias_dict = [
-                {**media.dict(), "original_url": str(media.original_url)}
-                for media in medias
+                {**media.model_dump(), "original_url": str(media.original_url)}
+                for media in result.medias
             ]
 
             process_reddit_data.delay(author_dict, posts_dict, medias_dict)
-            return author.id
+            return result.author.id
 
         logger.warning(f"No data found for author: {author_name}")
         return None

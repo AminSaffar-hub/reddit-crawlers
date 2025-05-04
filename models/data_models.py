@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -37,3 +37,9 @@ class Source(BaseModel):
     date_start: datetime
     source_type: Literal["reddit", "linkedin"]
     limit: int = 100
+
+
+class ExtractionResult(BaseModel):
+    author: Author
+    posts: List[Post]
+    medias: List[Media]

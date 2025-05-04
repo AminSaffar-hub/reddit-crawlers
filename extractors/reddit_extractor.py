@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import TimeoutException
 
 from extractors.base_extractor import BaseExtractor
-from models.data_models import Author, Media, Post, Source
+from models.data_models import Author, Media, Post, Source, ExtractionResult
 from scrapers.selenium_scraper import WebScraper
 from storage import minio_storage
 
@@ -18,8 +18,7 @@ class RedditExtractor(BaseExtractor):
         self.scraper = WebScraper()
         self.base_url = "https://www.reddit.com"
 
-    def extract(self, source_config: Source):
-
+    def extract(self, source_config: Source) -> ExtractionResult:
         author_posts_url = (
             f"{self.base_url}/user/{source_config.author}/submitted/?sort=top&t=month"
         )
@@ -43,10 +42,12 @@ class RedditExtractor(BaseExtractor):
                         all_medias.extend(medias)
             except TimeoutException:
                 logger.error(f"Timeout while loading {author_posts_url}")
+                raise
             except Exception as e:
                 logger.error(f"Error extracting data from {author_posts_url}: {e}")
+                raise
 
-        return author, posts, all_medias
+        return ExtractionResult(author=author, posts=posts, medias=all_medias)
 
     def _parse_post(self, post_element, author_id) -> Tuple[Post, List[Media]]:
         try:
@@ -155,8 +156,8 @@ if __name__ == "__main__":
             "secure": False,
         }
     )
-    minio_s.store_author(results[0])
-    for post in results[1]:
+    minio_s.store_author(results.author)
+    for post in results.posts:
         minio_s.store_post(post)
-    for media in results[2]:
+    for media in results.medias:
         minio_s.store_media(media)

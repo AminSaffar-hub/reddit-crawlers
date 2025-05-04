@@ -62,6 +62,9 @@ class BaseConfig:
     SNOWFLAKE_STAGE = os.environ.get("SNOWFLAKE_STAGE", "stage")
     SNOWFLAKE_DATABASE = os.environ.get("SNOWFLAKE_DATABASE", "database")
 
+    LINKEDIN_EMAIL = os.environ.get("LINKEDIN_EMAIL", "email")
+    LINKEDIN_PASSWORD = os.environ.get("LINKEDIN_PASSWORD", "password")
+
 
 class DevelopmentConfig(BaseConfig):
     CELERYD_LOG_LEVEL = "INFO"

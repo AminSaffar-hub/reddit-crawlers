@@ -10,13 +10,21 @@ from models.data_models import Author, Media, Post, Source
 logger = logging.getLogger(__name__)
 
 
-@shared_task(bind=True, base=ExtractTask, name="crawling:crawl_reddit_author")
-def crawl_reddit_author(self, author_name: str, date_start: datetime) -> Optional[str]:
+@shared_task(bind=True, base=ExtractTask, name="crawling:crawl_author")
+def crawl_author(
+    self, author_name: str, date_start: datetime, source_type: str
+) -> Optional[str]:
     try:
         logger.info(f"Starting crawl for author: {author_name} from date: {date_start}")
-        source_config = Source(author=author_name, date_start=date_start, limit=100)
+        source_config = Source(
+            author=author_name,
+            date_start=date_start,
+            source_type=source_type,
+            limit=100,
+        )
 
-        author, posts, medias = self.extractor.extract(source_config)
+        extractor = self.get_extractor(source_type)
+        author, posts, medias = extractor.extract(source_config)
 
         if author and posts:
             logger.info(f"Successfully extracted data for author: {author_name}")

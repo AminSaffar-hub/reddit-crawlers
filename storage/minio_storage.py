@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class MinIOHandler:
     def __init__(self, minio_config: dict):
         self.client = Minio(**minio_config)
-        self.buckets = {"data": "reddit-data", "media": "reddit-media"}
+        self.buckets = {"data": "extracts-data", "media": "extracts-media"}
         self.setup_buckets()
 
     def setup_buckets(self):

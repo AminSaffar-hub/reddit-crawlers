@@ -68,12 +68,12 @@ def test_setup_buckets_new(minio_handler, mock_minio):
     minio_handler.setup_buckets()
 
     assert mock_minio.bucket_exists.call_count == 2
-    mock_minio.bucket_exists.assert_any_call("reddit-data")
-    mock_minio.bucket_exists.assert_any_call("reddit-media")
+    mock_minio.bucket_exists.assert_any_call("extracts-data")
+    mock_minio.bucket_exists.assert_any_call("extracts-media")
 
     assert mock_minio.make_bucket.call_count == 2
-    mock_minio.make_bucket.assert_any_call("reddit-data")
-    mock_minio.make_bucket.assert_any_call("reddit-media")
+    mock_minio.make_bucket.assert_any_call("extracts-data")
+    mock_minio.make_bucket.assert_any_call("extracts-media")
 
 
 def test_setup_buckets_existing(minio_handler, mock_minio):
@@ -99,7 +99,7 @@ def test_store_author_success(minio_handler, mock_minio, sample_author):
 
         mock_minio.fput_object.assert_called_once()
         mock_minio.fput_object.assert_called_with(
-            "reddit-data",
+            "extracts-data",
             "authors/test_author.parquet",
             "authors/test_author.parquet",
             content_type="application/parquet",
@@ -119,7 +119,7 @@ def test_store_post_success(minio_handler, mock_minio, sample_post):
 
         mock_minio.fput_object.assert_called_once()
         mock_minio.fput_object.assert_called_with(
-            "reddit-data",
+            "extracts-data",
             "posts/test_post.parquet",
             "posts/test_post.parquet",
             content_type="application/parquet",
@@ -178,14 +178,14 @@ def test_store_media_different_types(minio_handler, mock_minio):
 
             assert mock_minio.fput_object.call_count == 2
             mock_minio.fput_object.assert_called_with(
-                "reddit-data",
+                "extracts-data",
                 f"media/metadata/test_media_{content_type}.parquet",
                 f"media/metadata/test_media_{content_type}.parquet",
                 content_type="application/parquet",
             )
 
             put_object_call = mock_minio.put_object.call_args
-            assert put_object_call.args[0] == "reddit-media"
+            assert put_object_call.args[0] == "extracts-media"
             assert (
                 put_object_call.args[1]
                 == f"media/files/test_media_{content_type}{expected_ext}"

@@ -35,7 +35,7 @@ def minio_handler():
 @pytest.fixture
 def sample_author():
     return Author(
-        id="test_author", name="Test Author", publication_karma=100, comment_karma=50
+        id="test_author", name="Test Author", publication_score=100, comment_score=50
     )
 
 
@@ -46,7 +46,7 @@ def sample_post():
         title="Test Post",
         text="This is a test post",
         timestamp=datetime.now(),
-        score=100,
+        num_likes=100,
         num_comments=50,
         url="https://example.com",
         author_id="test_author",

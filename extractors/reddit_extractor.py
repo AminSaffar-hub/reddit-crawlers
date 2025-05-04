@@ -1,9 +1,11 @@
 import logging
 from datetime import datetime, timedelta
+from typing import List, Tuple
 
 from bs4 import BeautifulSoup
 from selenium.common.exceptions import TimeoutException
 
+from extractors.base_extractor import BaseExtractor
 from models.data_models import Author, Media, Post, Source
 from scrapers.selenium_scraper import WebScraper
 from storage import minio_storage
@@ -11,14 +13,16 @@ from storage import minio_storage
 logger = logging.getLogger(__name__)
 
 
-class RedditExtractor:
+class RedditExtractor(BaseExtractor):
     def __init__(self):
         self.scraper = WebScraper()
         self.base_url = "https://www.reddit.com"
 
-    def extract(self, date_start: datetime, source_config: Source):
+    def extract(self, source_config: Source):
 
-        author_posts_url = f"{self.base_url}/user/{source_config.author}/submitted/?sort=top&t={source_config.time_filter}"
+        author_posts_url = (
+            f"{self.base_url}/user/{source_config.author}/submitted/?sort=top&t=month"
+        )
         posts = []
         all_medias = []
 
@@ -33,15 +37,10 @@ class RedditExtractor:
                 author = self._parse_author_profile(soup)
                 posts_soup = soup.find_all("shreddit-post")
                 for post_soup in posts_soup[: source_config.limit]:
-                    try:
-                        post, medias = self._parse_post(post_soup, author.id)
-                        if post and post.timestamp >= date_start:
-                            posts.append(post)
-                            all_medias.extend(medias)
-                    except Exception as e:
-                        logger.error(f"Error parsing post: {e}")
-                        continue
-
+                    post, medias = self._parse_post(post_soup, author.id)
+                    if post and post.timestamp >= source_config.date_start:
+                        posts.append(post)
+                        all_medias.extend(medias)
             except TimeoutException:
                 logger.error(f"Timeout while loading {author_posts_url}")
             except Exception as e:
@@ -49,12 +48,12 @@ class RedditExtractor:
 
         return author, posts, all_medias
 
-    def _parse_post(self, post_element, author_id):
+    def _parse_post(self, post_element, author_id) -> Tuple[Post, List[Media]]:
         try:
             base_attributes = {
                 "timestamp": post_element.get("created-timestamp"),
                 "post_id": post_element.get("id"),
-                "score": int(post_element.get("score") or 0),
+                "num_likes": int(post_element.get("num_likes") or 0),
                 "comments": int(post_element.get("comment-count") or 0),
                 "permalink": post_element.get("permalink"),
                 "subreddit": post_element.get("subreddit-name"),
@@ -93,7 +92,7 @@ class RedditExtractor:
                 text=content_text,
                 title=title,
                 timestamp=timestamp,
-                score=int(base_attributes["score"]),
+                num_likes=int(base_attributes["score"]),
                 num_comments=int(base_attributes["comments"]),
                 url=f"https://reddit.com{base_attributes['permalink']}",
                 author_id=author_id,
@@ -116,10 +115,10 @@ class RedditExtractor:
             logger.error(f"Error parsing post: {str(e)}")
             return None
 
-    def _parse_author_profile(self, author_profile_soup: BeautifulSoup):
+    def _parse_author_profile(self, author_profile_soup: BeautifulSoup) -> Author:
         author_id = author_profile_soup.find("shreddit-post").get("author-id")
         author_name = author_profile_soup.find("shreddit-post").get("author")
-        birth_date = author_profile_soup.find("time", {"data-testid": "cake-day"}).get(
+        joined_date = author_profile_soup.find("time", {"data-testid": "cake-day"}).get(
             "datetime"
         )
         karma = author_profile_soup.find_all("span", {"data-testid": "karma-number"})
@@ -127,9 +126,9 @@ class RedditExtractor:
         return Author(
             id=author_id,
             name=author_name,
-            birth_date=datetime.strptime(birth_date, "%Y-%m-%dT%H:%M:%S.%fZ"),
-            publication_karma=self._format_int(karma[0].text),
-            comment_karma=self._format_int(karma[1].text),
+            joined_date=datetime.strptime(joined_date, "%Y-%m-%dT%H:%M:%S.%fZ"),
+            publication_score=self._format_int(karma[0].text),
+            comment_score=self._format_int(karma[1].text),
         )
 
     def _format_int(self, text: str) -> int:
@@ -142,8 +141,11 @@ class RedditExtractor:
 if __name__ == "__main__":
     extractor = RedditExtractor()
     results = extractor.extract(
-        datetime.now() - timedelta(days=21),
-        Source(author="CozyBvnnies", time_filter="month", limit=10),
+        Source(
+            author="CozyBvnnies",
+            date_start=datetime.now() - timedelta(days=21),
+            limit=10,
+        ),
     )
     minio_s = minio_storage.MinIOHandler(
         {

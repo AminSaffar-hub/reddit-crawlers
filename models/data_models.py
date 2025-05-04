@@ -9,7 +9,7 @@ class Post(BaseModel):
     text: str
     title: str
     timestamp: datetime
-    score: int
+    num_likes: int
     num_comments: int
     url: Optional[str]
     author_id: str
@@ -18,9 +18,9 @@ class Post(BaseModel):
 class Author(BaseModel):
     id: str
     name: str
-    birth_date: Optional[datetime] = None
-    publication_karma: Optional[int] = Field(default=0, ge=0)
-    comment_karma: Optional[int] = Field(default=0, ge=0)
+    joined_date: Optional[datetime] = None
+    publication_score: Optional[int] = Field(default=0, ge=0)
+    comment_score: Optional[int] = Field(default=0, ge=0)
 
 
 class Media(BaseModel):
@@ -32,5 +32,5 @@ class Media(BaseModel):
 
 class Source(BaseModel):
     author: str
-    time_filter: str = "month"
+    date_start: datetime
     limit: int = 100

@@ -14,9 +14,9 @@ logger = logging.getLogger(__name__)
 def crawl_reddit_author(self, author_name: str, date_start: datetime) -> Optional[str]:
     try:
         logger.info(f"Starting crawl for author: {author_name} from date: {date_start}")
-        source_config = Source(author=author_name, time_filter="month", limit=100)
+        source_config = Source(author=author_name, date_start=date_start, limit=100)
 
-        author, posts, medias = self.extractor.extract(date_start, source_config)
+        author, posts, medias = self.extractor.extract(source_config)
 
         if author and posts:
             logger.info(f"Successfully extracted data for author: {author_name}")

@@ -36,7 +36,7 @@ stop-dev:
 	docker compose -f docker-compose.yml down
 
 formatter:
-	poetry run black .
+	poetry run black . && poetry run isort .
 
 mypy:
 	poetry run mypy .

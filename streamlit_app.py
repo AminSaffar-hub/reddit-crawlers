@@ -1,6 +1,7 @@
-import streamlit as st
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+
+import streamlit as st
 
 from celery_app import app
 from celery_tasks import tasks

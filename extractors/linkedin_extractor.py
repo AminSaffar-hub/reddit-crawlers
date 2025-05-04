@@ -41,16 +41,22 @@ class LinkedinExtractor(BaseExtractor):
                 posts_soup = soup.select("div.scaffold-finite-scroll__content li")
                 print(len(posts_soup))
                 for post_soup in posts_soup[: source_config.limit]:
-                    result = self._parse_post(post_soup, author.id)
-                    if result:
-                        post, medias = result
-                        if (
-                            post
-                            and post.timestamp
-                            and post.timestamp >= source_config.date_start
-                        ):
-                            posts.append(post)
-                            all_medias.extend(medias)
+                    try:
+                        result = self._parse_post(post_soup, author.id)
+                        if result:
+                            post, medias = result
+                            if (
+                                post
+                                and post.timestamp
+                                and post.timestamp >= source_config.date_start
+                            ):
+                                posts.append(post)
+                                all_medias.extend(medias)
+                    except Exception as e:
+                        logger.warning(f"Failed to extract post: {str(e)}")
+                        continue
+
+                return ExtractionResult(author=author, posts=posts, medias=all_medias)
 
             except TimeoutException:
                 logger.error(f"Timeout while loading {author_posts_url}")
@@ -58,7 +64,6 @@ class LinkedinExtractor(BaseExtractor):
             except Exception as e:
                 logger.error(f"Error extracting data from {author_posts_url}: {e}")
                 raise
-            return ExtractionResult(author=author, posts=posts, medias=all_medias)
 
     def _login(self, driver):
         driver.get("https://www.linkedin.com/login")

@@ -36,18 +36,23 @@ class RedditExtractor(BaseExtractor):
                 author = self._parse_author_profile(soup)
                 posts_soup = soup.find_all("shreddit-post")
                 for post_soup in posts_soup[: source_config.limit]:
-                    post, medias = self._parse_post(post_soup, author.id)
-                    if post and post.timestamp >= source_config.date_start:
-                        posts.append(post)
-                        all_medias.extend(medias)
+                    try:
+                        post, medias = self._parse_post(post_soup, author.id)
+                        if post and post.timestamp >= source_config.date_start:
+                            posts.append(post)
+                            all_medias.extend(medias)
+                    except Exception as e:
+                        logger.warning(f"Failed to extract post: {str(e)}")
+                        continue
+
+                return ExtractionResult(author=author, posts=posts, medias=all_medias)
+
             except TimeoutException:
                 logger.error(f"Timeout while loading {author_posts_url}")
                 raise
             except Exception as e:
                 logger.error(f"Error extracting data from {author_posts_url}: {e}")
                 raise
-
-        return ExtractionResult(author=author, posts=posts, medias=all_medias)
 
     def _parse_post(self, post_element, author_id) -> Tuple[Post, List[Media]]:
         try:

@@ -44,10 +44,8 @@ services:
     command: celery -A celery_app worker -Q crawling -n crawler@%h --loglevel=INFO
     volumes:
       - ./:/app
-    environment:
-      - SELENIUM_HUB_URL=http://selenium-chrome:4444/wd/hub
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    env_file:
+      - .env
     depends_on:
       - redis
       - minio
@@ -60,13 +58,8 @@ services:
     command: celery -A celery_app worker -Q processing -n processor@%h --loglevel=INFO
     volumes:
       - ./:/app
-    environment:
-      - MINIO_HOST=minio
-      - MINIO_PORT=9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    env_file:
+      - .env
     depends_on:
       - redis
 
@@ -77,13 +70,8 @@ services:
     command: celery -A celery_app worker -Q storage -n storage@%h --loglevel=INFO
     volumes:
       - ./:/app
-    environment:
-      - MINIO_HOST=minio
-      - MINIO_PORT=9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    env_file:
+      - .env
     depends_on:
       - redis
       - minio
@@ -95,13 +83,8 @@ services:
     command: celery -A celery_app worker -Q media -n media@%h --loglevel=INFO
     volumes:
       - ./:/app
-    environment:
-      - MINIO_HOST=minio
-      - MINIO_PORT=9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    env_file:
+      - .env
     depends_on:
       - redis
       - minio
@@ -113,9 +96,8 @@ services:
     command: celery -A celery_app flower
     ports:
       - "5555:5555"
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    env_file:
+      - .env
     depends_on:
       - redis
 
@@ -126,11 +108,8 @@ services:
     command: streamlit run streamlit_app.py --server.address=0.0.0.0 --server.port=8501
     ports:
       - "8501:8501"
-    volumes:
-      - ./:/app
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    env_file:
+      - .env
     depends_on:
       - redis
       - crawler_worker

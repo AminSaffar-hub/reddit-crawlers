@@ -11,9 +11,6 @@ This project is a data processing pipeline that scrapes, processes, and stores s
 - `models/`: Data models
 - `tests/`: Test files
 - `storage/`: Storage-related code
-- `posts/`: Processed post data
-- `authors/`: Author-related data
-- `media/`: Media files
 
 ## Prerequisites
 
@@ -53,6 +50,11 @@ This will start:
 - Flower (Celery monitoring) on port 5555
 - Streamlit web interface on port 8501
 
+## Usage
+
+To crawl a user's profile posts and Media you can use the streamlit interface available on Port 8501.
+Select the website where the user is subscribed and provide a username. To update the status of execution click on the refresh button.
+
 ## Services
 
 - **Crawler Worker**: Handles social media data scraping
@@ -76,7 +78,7 @@ The project uses environment variables for configuration. Key settings include:
 
 - Run tests:
 
- ```bash
+  ```bash
   make test
   ```
 

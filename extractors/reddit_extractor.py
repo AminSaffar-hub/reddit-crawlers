@@ -59,7 +59,7 @@ class RedditExtractor(BaseExtractor):
             base_attributes = {
                 "timestamp": post_element.get("created-timestamp"),
                 "post_id": post_element.get("id"),
-                "num_likes": int(post_element.get("num_likes") or 0),
+                "num_likes": int(post_element.get("score") or 0),
                 "comments": int(post_element.get("comment-count") or 0),
                 "permalink": post_element.get("permalink"),
                 "subreddit": post_element.get("subreddit-name"),
@@ -98,7 +98,7 @@ class RedditExtractor(BaseExtractor):
                 text=content_text,
                 title=title,
                 timestamp=timestamp,
-                num_likes=int(base_attributes["score"]),
+                num_likes=int(base_attributes["num_likes"]),
                 num_comments=int(base_attributes["comments"]),
                 url=f"https://reddit.com{base_attributes['permalink']}",
                 author_id=author_id,
@@ -128,6 +128,7 @@ class RedditExtractor(BaseExtractor):
             "datetime"
         )
         karma = author_profile_soup.find_all("span", {"data-testid": "karma-number"})
+        author_url = f"{self.base_url}/user/{author_name}"
 
         return Author(
             id=author_id,
@@ -135,6 +136,7 @@ class RedditExtractor(BaseExtractor):
             joined_date=datetime.strptime(joined_date, "%Y-%m-%dT%H:%M:%S.%fZ"),
             publication_score=self._format_int(karma[0].text),
             comment_score=self._format_int(karma[1].text),
+            url=author_url,
         )
 
     def _format_int(self, text: str) -> int:

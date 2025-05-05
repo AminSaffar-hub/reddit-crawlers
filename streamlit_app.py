@@ -73,6 +73,9 @@ if submitted and author_name:
 if st.session_state.tasks:
     st.header("Active Tasks")
 
+    if st.button("🔄 Refresh Task Status"):
+        st.rerun()
+
     for task_id, task_info in list(st.session_state.tasks.items()):
         with st.expander(
             f"{task_info['source_type'].capitalize()} Task for {task_info['author_name']}"

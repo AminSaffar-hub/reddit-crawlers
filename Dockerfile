@@ -21,5 +21,6 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATH=/app
 
 CMD ["poetry", "run", "python", "main.py"]

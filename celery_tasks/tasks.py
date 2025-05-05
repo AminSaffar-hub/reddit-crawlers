@@ -5,6 +5,7 @@ from typing import List, Optional
 from celery import shared_task
 
 from celery_tasks.base_task import ExtractTask, StorageTask
+from formatters.http_url import HttpUrlFormatter
 from models.data_models import Author, ExtractionResult, Media, Post, Source
 
 logger = logging.getLogger(__name__)
@@ -28,12 +29,10 @@ def crawl_author(
 
         if result.author and result.posts:
             logger.info(f"Successfully extracted data for author: {author_name}")
-            author_dict = result.author.model_dump()
-            posts_dict = [post.model_dump() for post in result.posts]
-            medias_dict = [
-                {**media.model_dump(), "original_url": str(media.original_url)}
-                for media in result.medias
-            ]
+            formatter = HttpUrlFormatter()
+            author_dict = formatter.format_model(result.author)
+            posts_dict = formatter.format_models(result.posts)
+            medias_dict = formatter.format_models(result.medias)
 
             process_reddit_data.delay(author_dict, posts_dict, medias_dict)
             return result.author.id

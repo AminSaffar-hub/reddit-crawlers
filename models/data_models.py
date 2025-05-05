@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Literal, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -11,7 +11,7 @@ class Post(BaseModel):
     timestamp: Optional[datetime] = None
     num_likes: Optional[int] = None
     num_comments: Optional[int] = None
-    url: Optional[str] = None
+    url: Optional[HttpUrl] = None
     author_id: str
 
 
@@ -19,7 +19,7 @@ class Author(BaseModel):
     id: str
     name: str
     headline: Optional[str] = None
-    url: Optional[str] = None
+    url: Optional[HttpUrl] = None
     joined_date: Optional[datetime] = None
     publication_score: Optional[int] = Field(default=0, ge=0)
     comment_score: Optional[int] = Field(default=0, ge=0)

@@ -11,7 +11,6 @@ This project is a data processing pipeline that scrapes, processes, and stores s
 - `models/`: Data models
 - `tests/`: Test files
 - `storage/`: Storage-related code
-- `examples/`: Example usage and documentation
 - `posts/`: Processed post data
 - `authors/`: Author-related data
 - `media/`: Media files

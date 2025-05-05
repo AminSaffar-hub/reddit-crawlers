@@ -1,10 +1,10 @@
-# LinkedIn Data Processing Pipeline
+# Social Media Data Processing Pipeline
 
-This project is a data processing pipeline that scrapes, processes, and stores LinkedIn data. It uses Celery for task management, MinIO for storage, and Selenium for web scraping.
+This project is a data processing pipeline that scrapes, processes, and stores social media data. It uses Celery for task management, MinIO for storage, and Selenium for web scraping.
 
 ## Project Structure
 
-- `scrapers/`: Contains LinkedIn scraping logic
+- `scrapers/`: Contains social media scraping logic
 - `extractors/`: Data extraction and processing modules
 - `config/`: Configuration files
 - `celery_tasks/`: Celery task definitions
@@ -56,7 +56,7 @@ This will start:
 
 ## Services
 
-- **Crawler Worker**: Handles LinkedIn data scraping
+- **Crawler Worker**: Handles social media data scraping
 - **Processor Worker**: Processes scraped data
 - **Storage Worker**: Manages data storage in MinIO
 - **Media Worker**: Handles media file processing
@@ -71,7 +71,7 @@ The project uses environment variables for configuration. Key settings include:
 - Selenium hub URL
 - MinIO credentials
 - Snowflake database settings
-- LinkedIn credentials
+- social media credentials
 
 ## Development
 

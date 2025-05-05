@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 
 from config.config import settings
 from extractors.base_extractor import BaseExtractor
-from models.data_models import Author, Media, Post, Source, ExtractionResult
+from models.data_models import Author, ExtractionResult, Media, Post, Source
 from scrapers.selenium_scraper import WebScraper
 
 logger = logging.getLogger(__name__)
@@ -211,4 +211,4 @@ if __name__ == "__main__":
             source_type="linkedin",
             limit=100,
         )
-    ) 
+    )

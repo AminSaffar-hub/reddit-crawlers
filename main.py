@@ -1,5 +1,5 @@
-import logging
 import argparse
+import logging
 from datetime import datetime, timedelta
 
 from celery_app import app

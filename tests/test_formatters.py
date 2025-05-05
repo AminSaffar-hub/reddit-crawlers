@@ -1,5 +1,6 @@
-import pytest
 from datetime import datetime, timedelta
+
+import pytest
 
 from extractors.linkedin_extractor import LinkedinExtractor
 from extractors.reddit_extractor import RedditExtractor

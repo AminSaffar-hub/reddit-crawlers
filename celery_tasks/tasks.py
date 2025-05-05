@@ -5,7 +5,7 @@ from typing import List, Optional
 from celery import shared_task
 
 from celery_tasks.base_task import ExtractTask, StorageTask
-from models.data_models import Author, Media, Post, Source, ExtractionResult
+from models.data_models import Author, ExtractionResult, Media, Post, Source
 
 logger = logging.getLogger(__name__)
 

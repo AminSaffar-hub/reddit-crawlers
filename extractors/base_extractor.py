@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
-from models.data_models import Source, ExtractionResult
+from models.data_models import ExtractionResult, Source
 
 
 class BaseExtractor(abc.ABC):

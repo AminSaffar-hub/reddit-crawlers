@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import TimeoutException
 
 from extractors.base_extractor import BaseExtractor
-from models.data_models import Author, Media, Post, Source, ExtractionResult
+from models.data_models import Author, ExtractionResult, Media, Post, Source
 from scrapers.selenium_scraper import WebScraper
 from storage import minio_storage
 

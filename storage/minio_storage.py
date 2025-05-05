@@ -10,11 +10,12 @@ from minio import Minio
 from minio.error import S3Error
 
 from models.data_models import Author, Media, Post
+from storage.base_storage import BaseStorageHandler
 
 logger = logging.getLogger(__name__)
 
 
-class MinIOHandler:
+class MinIOHandler(BaseStorageHandler):
     def __init__(self, minio_config: dict):
         self.client = Minio(**minio_config)
         self.buckets = {"data": "extracts-data", "media": "extracts-media"}

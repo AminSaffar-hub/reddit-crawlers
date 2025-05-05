@@ -1,5 +1,5 @@
-from typing import Optional
 import importlib
+from typing import Optional
 
 from celery import Task
 

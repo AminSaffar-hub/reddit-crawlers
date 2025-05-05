@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from celery_app import app
 from celery_tasks import tasks
+from config.config import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,7 +15,7 @@ def main():
     parser.add_argument(
         "--source-type",
         type=str,
-        choices=["reddit", "linkedin"],
+        choices=settings.EXTRACTORS.keys(),
         required=True,
         help="Type of source to scrape (reddit or linkedin)",
     )

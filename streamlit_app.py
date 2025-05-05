@@ -5,6 +5,7 @@ import streamlit as st
 
 from celery_app import app
 from celery_tasks import tasks
+from config.config import settings
 
 st.set_page_config(page_title="Social Media Scraper", layout="wide")
 
@@ -46,7 +47,7 @@ with st.form("scraper_form"):
     with col1:
         source_type = st.selectbox(
             "Select source type",
-            options=["reddit", "linkedin"],
+            options=settings.EXTRACTORS.keys(),
             help="Choose the social media platform to scrape from",
         )
     with col2:

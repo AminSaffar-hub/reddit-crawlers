@@ -134,7 +134,10 @@ class MinIOHandler(BaseStorageHandler):
                 content_type=content_type,
             )
 
-            return f"https://{settings.MINIO_HOST}:{settings.MINIO_PORT}/{self.buckets['media']}/{path}"
+            return (
+                f"https://{settings.MINIO_HOST}:{settings.MINIO_PORT}/{self.buckets['media']}/"
+                + f"{path}"
+            )
 
         except Exception as e:
             logger.error(f"Error downloading media {media.id}: {e}")

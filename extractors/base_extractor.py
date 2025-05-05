@@ -1,7 +1,4 @@
 import abc
-from datetime import datetime
-from pathlib import Path
-from typing import List
 
 from models.data_models import ExtractionResult, Source
 

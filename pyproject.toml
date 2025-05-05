@@ -25,6 +25,7 @@ streamlit = "^1.45.0"
 flower = "^2.0.1"
 snowflake-connector-python = "^3.15.0"
 nanoid = "^2.0.0"
+flake8-pyproject = "^1.2.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -33,3 +34,11 @@ ipykernel = "^6.29.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 100
+exclude = [".git",
+    "__pycache__",
+    "venv",
+    ".venv",
+    ]

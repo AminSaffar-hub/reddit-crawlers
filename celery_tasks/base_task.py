@@ -5,7 +5,6 @@ from celery import Task
 
 from config.config import settings
 from extractors.base_extractor import BaseExtractor
-from models.data_models import Source
 from storage.minio_storage import MinIOHandler
 
 

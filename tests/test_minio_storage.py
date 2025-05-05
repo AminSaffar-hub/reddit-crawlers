@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from minio import Minio
-from pydantic import BaseModel, HttpUrl
+from pydantic import HttpUrl
 
 from models.data_models import Author, Media, Post
 from storage.minio_storage import MinIOHandler
@@ -163,9 +163,7 @@ def test_store_media_different_types(minio_handler, mock_minio):
 
         with patch("pyarrow.Table") as mock_table_class, patch(
             "pyarrow.parquet.write_table"
-        ) as mock_write, patch("os.remove") as mock_remove, patch(
-            "requests.get"
-        ) as mock_get:
+        ), patch("os.remove"), patch("requests.get") as mock_get:
 
             mock_table = MagicMock()
             mock_table_class.from_pydict.return_value = mock_table

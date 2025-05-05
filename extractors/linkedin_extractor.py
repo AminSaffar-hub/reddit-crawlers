@@ -147,7 +147,7 @@ class LinkedinExtractor(BaseExtractor):
         return post, medias
 
     def _parse_author_profile(self, author_profile_soup: BeautifulSoup, author_id: str):
-        author_name = text = (
+        author_name = (
             author_profile_soup.select_one('a[href*="/in/"] h3').get_text(strip=True)
             if author_profile_soup.select_one('a[href*="/in/"] h3')
             else None
@@ -156,7 +156,7 @@ class LinkedinExtractor(BaseExtractor):
         author_path = author_profile_soup.select_one('a[href*="/in/"]')["href"]
         author_url = f"{self.base_url}{author_path}" if author_path else None
 
-        author_headline = text = (
+        author_headline = (
             author_profile_soup.select_one('div[class*="break-words"] h4').get_text(
                 strip=True
             )

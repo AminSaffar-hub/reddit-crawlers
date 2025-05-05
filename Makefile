@@ -42,7 +42,7 @@ mypy:
 	poetry run mypy .
 
 lint:
-	poetry run ruff check . && poetry run black --check .
+	poetry run ruff check . && poetry run black --check . && poetry run flake8 .
 
 lint-watch:
 	poetry run ruff check . --watch

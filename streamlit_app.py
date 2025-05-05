@@ -1,4 +1,3 @@
-import time
 from datetime import datetime, timedelta
 
 import streamlit as st
@@ -85,7 +84,7 @@ if st.session_state.tasks:
             st.session_state.tasks[task_id]["status"] = status["status"]
 
             if status["status"] == "SUCCESS":
-                st.success(f"✅ Task completed successfully!")
+                st.success("✅ Task completed successfully!")
                 st.write(f"Author ID: {status['result']}")
             elif status["status"] == "FAILURE":
                 st.error(f"❌ Task failed: {status['error']}")

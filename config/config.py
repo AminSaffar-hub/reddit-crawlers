@@ -44,7 +44,10 @@ class BaseConfig:
     worker_hijack_root_logger = False
     worker_log_color = True
     worker_log_format = "[%(asctime)s: %(levelname)s/%(processName)s] %(message)s"
-    worker_task_log_format = "[%(asctime)s: %(levelname)s/%(processName)s] [%(task_name)s(%(task_id)s)] %(message)s"
+    worker_task_log_format = (
+        "[%(asctime)s: %(levelname)s/%(processName)s] [%(task_name)s(%(task_id)s)]"
+        + " %(message)s"
+    )
 
     SELENIUM_HUB_URL = os.environ.get(
         "SELENIUM_HUB_URL", "http://localhost:4444/wd/hub"

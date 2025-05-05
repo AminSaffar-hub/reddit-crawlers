@@ -6,7 +6,7 @@ from models.data_models import Author, Media, Post
 class BaseStorageHandler(abc.ABC):
 
     @abc.abstractmethod
-    def setup_bucket(self) -> None:
+    def setup_buckets(self) -> None:
         """Setup the bucket for the storage"""
         raise NotImplementedError("Method not implemented")
 

@@ -65,6 +65,30 @@ class BaseConfig:
     LINKEDIN_EMAIL = os.environ.get("LINKEDIN_EMAIL", "email")
     LINKEDIN_PASSWORD = os.environ.get("LINKEDIN_PASSWORD", "password")
 
+    EXTRACTORS = {
+        "reddit": {
+            "class": "extractors.reddit_extractor.RedditExtractor",
+            "enabled": True,
+        },
+        "linkedin": {
+            "class": "extractors.linkedin_extractor.LinkedinExtractor",
+            "enabled": True,
+        },
+    }
+
+    STORAGE = {
+        "minio": {
+            "class": "storage.minio_storage.MinIOHandler",
+            "enabled": True,
+            "config": {
+                "endpoint": f"{MINIO_HOST}:{MINIO_PORT}",
+                "access_key": MINIO_ACCESS_KEY,
+                "secret_key": MINIO_SECRET_KEY,
+                "secure": False,
+            },
+        }
+    }
+
 
 class DevelopmentConfig(BaseConfig):
     CELERYD_LOG_LEVEL = "INFO"

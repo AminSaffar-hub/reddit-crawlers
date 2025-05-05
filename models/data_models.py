@@ -35,7 +35,7 @@ class Media(BaseModel):
 class Source(BaseModel):
     author: str
     date_start: datetime
-    source_type: Literal["reddit", "linkedin"]
+    source_type: str
     limit: int = 100
 
 

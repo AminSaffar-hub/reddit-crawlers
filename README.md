@@ -1,1 +1,98 @@
-# reddit-crawlers
+# LinkedIn Data Processing Pipeline
+
+This project is a data processing pipeline that scrapes, processes, and stores LinkedIn data. It uses Celery for task management, MinIO for storage, and Selenium for web scraping.
+
+## Project Structure
+
+- `scrapers/`: Contains LinkedIn scraping logic
+- `extractors/`: Data extraction and processing modules
+- `config/`: Configuration files
+- `celery_tasks/`: Celery task definitions
+- `models/`: Data models
+- `tests/`: Test files
+- `storage/`: Storage-related code
+- `examples/`: Example usage and documentation
+- `posts/`: Processed post data
+- `authors/`: Author-related data
+- `media/`: Media files
+
+## Prerequisites
+
+- Python 3.10 or higher
+- Docker and Docker Compose
+- Poetry for dependency management
+
+## Setup
+
+1. Clone the repository
+2. Copy `.env-example` to `.env` and fill in your credentials:
+
+   ```bash
+   cp .env-example .env
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   poetry install
+   ```
+
+## Running the Project
+
+Start all services using Docker Compose:
+
+```bash
+make run-dev-build
+```
+
+This will start:
+
+- MinIO (object storage) on port 9000
+- Redis (message broker) on port 6379
+- Selenium Chrome on port 4444
+- Celery workers for different tasks
+- Flower (Celery monitoring) on port 5555
+- Streamlit web interface on port 8501
+
+## Services
+
+- **Crawler Worker**: Handles LinkedIn data scraping
+- **Processor Worker**: Processes scraped data
+- **Storage Worker**: Manages data storage in MinIO
+- **Media Worker**: Handles media file processing
+- **Flower**: Monitors Celery tasks
+- **Streamlit**: Web interface for data visualization
+
+## Configuration
+
+The project uses environment variables for configuration. Key settings include:
+
+- Celery configuration (broker and backend)
+- Selenium hub URL
+- MinIO credentials
+- Snowflake database settings
+- LinkedIn credentials
+
+## Development
+
+- Run tests:
+
+ ```bash
+  make test
+  ```
+
+- Format code:
+  
+  ```bash
+  make formatter
+  ```
+
+- lint checking:
+  
+  ```bash
+  make lint
+  ```
+
+## License
+
+This project is licensed under the terms specified in the LICENSE file.

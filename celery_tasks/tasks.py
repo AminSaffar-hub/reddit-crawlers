@@ -34,7 +34,7 @@ def crawl_author(
             posts_dict = formatter.format_models(result.posts)
             medias_dict = formatter.format_models(result.medias)
 
-            process_reddit_data.delay(author_dict, posts_dict, medias_dict)
+            process_crawled_data.delay(author_dict, posts_dict, medias_dict)
             return result.author.id
 
         logger.warning(f"No data found for author: {author_name}")
@@ -45,8 +45,8 @@ def crawl_author(
         self.retry(exc=e, countdown=60)
 
 
-@shared_task(bind=True, name="processing:process_reddit_data")
-def process_reddit_data(
+@shared_task(bind=True, name="processing:process_crawled_data")
+def process_crawled_data(
     self, author_data: dict, posts_data: List[dict], medias_data: List[dict]
 ):
     try:

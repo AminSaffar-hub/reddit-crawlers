@@ -9,6 +9,7 @@ import requests
 from minio import Minio
 from minio.error import S3Error
 
+from config.config import settings
 from models.data_models import Author, Media, Post
 from storage.base_storage import BaseStorageHandler
 
@@ -52,14 +53,14 @@ class MinIOHandler(BaseStorageHandler):
 
     def store_media(self, media: Media):
         try:
-            data = media.model_dump()
             path = f"media/metadata/{media.id}.parquet"
+            data = media.model_dump()
             self._save_parquet(data, path, self.buckets["data"])
             if media.original_url:
                 media_path = self._download_media(media)
                 if media_path:
                     media.hosted_url = media_path
-                    self._save_parquet(media.dict(), path, self.buckets["data"])
+                    self._save_parquet(media.model_dump(), path, self.buckets["data"])
 
         except Exception as e:
             logger.error(f"Error storing media {media.id}: {e}")
@@ -133,7 +134,7 @@ class MinIOHandler(BaseStorageHandler):
                 content_type=content_type,
             )
 
-            return path
+            return f"https://{settings.MINIO_HOST}:{settings.MINIO_PORT}/{self.buckets['media']}/{path}"
 
         except Exception as e:
             logger.error(f"Error downloading media {media.id}: {e}")

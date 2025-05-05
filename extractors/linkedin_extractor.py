@@ -39,7 +39,6 @@ class LinkedinExtractor(BaseExtractor):
                 soup = BeautifulSoup(driver.page_source, "html.parser")
                 author = self._parse_author_profile(soup, source_config.author)
                 posts_soup = soup.select("div.scaffold-finite-scroll__content li")
-                print(len(posts_soup))
                 for post_soup in posts_soup[: source_config.limit]:
                     try:
                         result = self._parse_post(post_soup, author.id)
@@ -80,6 +79,7 @@ class LinkedinExtractor(BaseExtractor):
         password.submit()
 
     def _parse_post(self, post_element, author_id):
+
         post_id = generate(size=8)
 
         post_url = None
@@ -96,9 +96,7 @@ class LinkedinExtractor(BaseExtractor):
             time_tag = actor_container.find(
                 "span", {"class": "update-components-actor__sub-description"}
             )
-            print(actor_container)
             if time_tag:
-                print(time_tag.get_text(strip=True))
                 post_time = self._convert_relative_date(time_tag.get_text(strip=True))
 
         post_content = None
@@ -210,10 +208,7 @@ if __name__ == "__main__":
         Source(
             author="etnikhalili",
             date_start=datetime.now() - timedelta(days=45),
+            source_type="linkedin",
             limit=100,
         )
-    )
-
-    print(result.author)
-    print(result.posts)
-    print(result.medias)
+    ) 

@@ -150,6 +150,7 @@ if __name__ == "__main__":
         Source(
             author="CozyBvnnies",
             date_start=datetime.now() - timedelta(days=21),
+            source_type="reddit",
             limit=10,
         ),
     )

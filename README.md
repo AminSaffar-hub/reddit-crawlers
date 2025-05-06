@@ -55,6 +55,10 @@ This will start:
 To crawl a user's profile posts and Media you can use the streamlit interface available on Port 8501.
 Select the website where the user is subscribed and provide a username. To update the status of execution click on the refresh button.
 
+## Snowflake Operations and Queries
+
+All operations and queries related to snowflake can be found on the Snowflake_tasks.ipynb jupyter notebook.
+
 ## Services
 
 - **Crawler Worker**: Handles social media data scraping
